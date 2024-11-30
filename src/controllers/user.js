@@ -43,21 +43,18 @@ module.exports = {
 
         const result = await User.create(req.body);
 
-        res.status(200).send({
+        res.status(201).send({
             error: false,
             result
         })
     },
 
     read: async (req, res) => {
-
         /*
            #swagger.tags = ["Users"]
            #swagger.summary = "Get Single User"
-   */
-
+        */
         const result = await User.findOne({ _id: req.params.id })
-
 
         res.status(200).send({
             error: false,
@@ -69,11 +66,11 @@ module.exports = {
         /*
            #swagger.tags = ["Users"]
            #swagger.summary = "Update User"
-     */
+        */
 
         const result = await User.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
-        res.status(200).send({
+        res.status(202).send({
             error: false,
             result
         })
@@ -83,7 +80,7 @@ module.exports = {
         /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Delete User"
-      */
+        */
 
         const { deletedCount } = await User.deleteOne({ _id: req.params.id })
 
@@ -91,5 +88,4 @@ module.exports = {
             error: !deletedCount,
         })
     },
-
 }
