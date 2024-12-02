@@ -2,7 +2,6 @@
 /* -------------------------------------------------------
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
-
 const User = require('../models/user')
 
 module.exports = {
@@ -21,34 +20,38 @@ module.exports = {
                 </ul>
             `
         */
-
         const result = await res.getModelList(User);
-
         res.status(200).send({
             error: false,
             details: await res.getModelListDetails(User),
             result
         })
     },
-
     create: async (req, res) => {
         /*
              #swagger.tags = ["Users"]
              #swagger.summary = "Create User"
-     */
-
+        */
         if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(req.body.password)) {
             throw new Error("Password must be at least 8 characters long and contain at least one special character and at least one uppercase character")
         }
 
         const result = await User.create(req.body);
 
+        SendMail(
+            result.email,
+            `Welcome ${result.userName} to DE09 Pizza Shop`,
+            `
+            <h1>Welcome ${result.userName} </h1>
+            <h2> We are happy to work with you :) </h2>
+            `
+        )
+
         res.status(201).send({
             error: false,
             result
         })
     },
-
     read: async (req, res) => {
         /*
            #swagger.tags = ["Users"]
@@ -61,13 +64,11 @@ module.exports = {
             result
         })
     },
-
     update: async (req, res) => {
         /*
            #swagger.tags = ["Users"]
            #swagger.summary = "Update User"
         */
-
         const result = await User.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
         res.status(202).send({
@@ -75,13 +76,11 @@ module.exports = {
             result
         })
     },
-
     deleteUser: async (req, res) => {
         /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Delete User"
         */
-
         const { deletedCount } = await User.deleteOne({ _id: req.params.id })
 
         res.status(deletedCount ? 204 : 404).send({
