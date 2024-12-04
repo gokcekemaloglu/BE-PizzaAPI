@@ -5,7 +5,6 @@
 const router = require('express').Router()
 /* ------------------------------------------------------- */
 
-
 const { list, create, read, update, deletePizza } = require('../controllers/pizza')
 const upload = require('../middlewares/upload')
 
